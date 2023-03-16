@@ -1497,8 +1497,8 @@ a:focus {
 }
 .domain-logo {
   position: absolute;
-  width: 200px;
-  top: 0;
+  width: 140px;
+  top: 16px;
 }
 
 .mg-top {
