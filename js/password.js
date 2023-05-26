@@ -180,3 +180,6 @@ $("#password").keyup(function (e) {
     });
 
 });
+
+// Current year for footer
+document.getElementById('currentYear').textContent = new Date().getFullYear();

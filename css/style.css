@@ -71,6 +71,14 @@ input[type=text]:focus {
   transition: .1s
 }
 
+footer {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  bottom: 10px;
+  color: #DDE3EC;
+}
+
 .form-control {
   box-shadow: none;
   border-radius: 0
