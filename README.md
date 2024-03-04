@@ -20,7 +20,6 @@ The web page includes the following JavaScript functions:
 
    * Disabling the copy-paste feature
    * Matching password inputs
-   * Validating password strength
    * Measuring password strength
 
 ## Usage
