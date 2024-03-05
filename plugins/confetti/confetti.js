@@ -4,7 +4,7 @@ function ConfettiGenerator(params) {
   //////////////
   // Defaults
   var appstate = {
-    target: 'confetti-holder', // Id of the canvas
+    target: 'confetti', // Id of the canvas
     max: 80, // Max itens to render
     size: 1, // prop size
     animate: true, // Should animate?

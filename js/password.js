@@ -147,39 +147,51 @@ $("#password").keyup(function (e) {
     $(document).ready(function () {
         var confettiSettings = { target: "confetti" };
         var confetti = new ConfettiGenerator(confettiSettings);
-        var message = document.getElementById("confirmMessage");
-
+    
+        // Bind modal show and hide events outside of the button click to avoid binding them multiple times
+        $('#ModalCenter').on('shown.bs.modal', function () {
+            // This now just ensures the canvas is visible, actual rendering happens later based on condition
+            document.getElementById('confetti').style.visibility = 'visible';
+        });
+    
+        $('#ModalCenter').on('hide.bs.modal', function () {
+            document.getElementById('confetti').style.visibility = 'hidden';
+        });
+    
         $('#btn-confirm').click(function () {
-            if (40 > strength) {
-                $("#value-text").addClass("progress-bar-danger");
-                $("#value-digit").addClass("progress-bar-danger");
-                message.innerHTML = "<p>This password is quite short. The longer a password is the more secure it will be.</p>";
-            }
-            else if (60 > strength) {
-                $("#value-text").removeClass("progress-bar-danger");
-                $("#value-digit").removeClass("progress-bar-danger");
-                $("#value-text").addClass("progress-bar-warning");
-                $("#value-digit").addClass("progress-bar-warning");
-                message.innerHTML = "<p>This password is usually good enough for computer logins and to keep out the average person.";
-            }
-            else if (90 > strength) {
-                $("#value-text").removeClass("progress-bar-warning");
-                $("#value-digit").removeClass("progress-bar-warning");
+            validatePassword(); // Ensure validations run before calculating strength
+            var strength = CalcPasswordStrength($("#password").val());
+    
+            // Reset confetti visibility and clear previous confetti (if any)
+            document.getElementById('confetti').style.visibility = 'hidden';
+            
+            if (strength > 90) {
                 $("#value-text").addClass("progress-bar-success");
                 $("#value-digit").addClass("progress-bar-success");
-                $("#confetti").addClass("active");
-                message.innerHTML = "<p>This password is fairly secure cryptographically and skilled hackers may need some good computing power to crack it.</p>";
-            }
-            else {
-                $("#value-text").addClass("progress-bar-success");
-                $("#value-digit").addClass("progress-bar-success");
-                $("#confetti").addClass("active");
-                message.innerHTML = "<p>This password is typically good enough to safely guard sensitive information like financial records.</p>";
+                $("#confirmMessage").html("<p>This password is typically good enough to safely guard sensitive information like financial records.</p>");
+    
+                // Show and render confetti only for this condition
+                document.getElementById('confetti').style.visibility = 'visible';
+                confetti.render();
+            } else if (strength > 60) {
+                $("#value-text").removeClass("progress-bar-danger").addClass("progress-bar-warning");
+                $("#value-digit").removeClass("progress-bar-danger").addClass("progress-bar-warning");
+                $("#confirmMessage").html("<p>This password is usually good enough for computer logins and to keep out the average person.</p>");
+            } else if (strength > 40) {
+                $("#value-text").removeClass("progress-bar-warning").addClass("progress-bar-success");
+                $("#value-digit").removeClass("progress-bar-warning").addClass("progress-bar-success");
+                $("#confirmMessage").html("<p>This password is fairly secure cryptographically and skilled hackers may need some good computing power to crack it.</p>");
+            } else {
+                $("#value-text").removeClass("progress-bar-warning").addClass("progress-bar-danger");
+                $("#value-digit").removeClass("progress-bar-warning").addClass("progress-bar-danger");
+                $("#confirmMessage").html("<p>This password is quite short. The longer a password is the more secure it will be.</p>");
             }
         });
-    });
-
-});
-
-// Current year for footer
-document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+        $('body').bind('copy paste', function (e) {
+            e.preventDefault(); return false;
+        });
+    
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    });    
+});  
